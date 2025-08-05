@@ -30,10 +30,8 @@ const createMessage = (text: string, type: string, delay = 3000) => {
     }, delay);
 };
 
-const Message = {
-    warn: (text: string, delay?: number) => createMessage(text, 'warn', delay),
-    error: (text: string, delay?: number) => createMessage(text, 'error', delay),
-    success: (text: string, delay?: number) => createMessage(text, 'success', delay),
+export const message = {
+  success: (text: string, delay?: number): void => createMessage(text, 'success', delay),
+  error: (text: string, delay?: number): void => createMessage(text, 'error', delay),
+  info: (text: string, delay?: number): void => createMessage(text, 'info', delay),
 };
-
-export default Message;

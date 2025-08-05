@@ -1,11 +1,12 @@
+import { uuidv4 } from "../utils/uuid.ts"
 const createMessage = (text: string, type: string, delay = 3000) => {
-    const popup = document.querySelector('#popup') as HTMLDivElement;
+    const popup = document.querySelector('#message-dialog') as HTMLDivElement;
     if (!popup) {
         console.warn('Popup container not found');
         return;
     }
 
-    const messageID = `message-${crypto.randomUUID()}`; // 更安全的唯一 ID
+    const messageID = `message-${uuidv4()}`; // 更安全的唯一 ID
 
     const div = document.createElement('div');
     div.className = `vg-message message-${type}`;

@@ -1,4 +1,4 @@
-const formatfileSize = (val: number): string => {
+export const formatfileSize = (val: number): string => {
     const KB = 1024;
     const MB = KB * 1024;
     const GB = MB * 1024;
@@ -16,4 +16,3 @@ const formatfileSize = (val: number): string => {
     }
 };
 
-export default formatfileSize

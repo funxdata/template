@@ -1,4 +1,4 @@
-class FxDate {
+export class FxDate {
     private date: Date;
     private year: string;
     private month: string;
@@ -70,4 +70,3 @@ class FxDate {
     }
 }
 
-export default FxDate;

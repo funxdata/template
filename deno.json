@@ -1,20 +1,31 @@
-
 {
-    "name": "@dowell/template",
+    "name": "@funxdata/template",
     "version": "0.1.1",
     "license": "MIT",
     "exports": {
-      "./":"./src/types.ts"
+      "./comps":"./comps/index.ts"
     },
     "nodeModulesDir": "auto",
+    "exclude": [
+        ".github",
+        "node_modules",
+        "index.html",
+        ".prettierrc",
+        "plugin",
+        "src"
+    ],
     "tasks": {
-        "view": "deno run --allow-net --allow-read  --allow-run --allow-env --allow-ffi  jsr:@dowell/toolkit/view",
-        "pack":"deno run --allow-net --allow-read --allow-env --allow-ffi jsr:@dowell/toolkit/pack"
+        "view": "deno run --allow-sys --allow-net --allow-read  --allow-run --allow-env --allow-ffi jsr:@funxdata/toolkit/view",
+        "pack":"deno run --allow-net --allow-read --allow-write --allow-env --allow-ffi --allow-run jsr:@funxdata/toolkit/pack",
+        "release":"deno run --allow-net --allow-read  --allow-run --allow-ffi --allow-env --allow-sys jsr:@funxdata/toolkit/release"
     },
     "imports": {
-        "@dowell/toolkit": "jsr:@dowell/toolkit@^0.1.7"
+        "@/": "./",
+        "@funxdata/toolkit": "jsr:@funxdata/toolkit@^0.1.30",
+        "@std/assert": "jsr:@std/assert@1",
+        "@std/path": "jsr:@std/path@^1.1.1"
     },
     "compilerOptions": {
-        "lib": ["dom", "esnext"]
+        "lib": ["dom", "esnext","deno.ns", "deno.unstable"]
     }
 }

@@ -7,36 +7,33 @@
 * 安装
 
 ```
-  deno add jsr:@dowell/template
+  deno add jsr:@funxdata/template
 ```
-* 修改入口 index.html文件
+* 元素
 
 ```
-  
-<!-- Include Handlebars from a CDN -->
-<script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js"></script>
+"@funxdata/template/element":"jsr:@funxdata/template@^0.1.2/element"
+```
 
+* 组件入口
+
+```
+"@funxdata/template/comps":"jsr:@funxdata/template@^0.1.2/comps"
+```
+
+* 模板
+
+```
+"@funxdata/template/template":"jsr:@funxdata/template@^0.1.2/template"
 ```
 
 * 开发
-
-```
-    import Handlebars from "dowell/template"
-  // compile the template
-  var template = Handlebars.compile("Handlebars <b>{{doesWhat}}</b>");
-  // execute the compiled template and print the output to the console
-  console.log(template({ doesWhat: "rocks!" }));
-```
-
 
 #### 关于
 
 * 相关库
 
-```
-    https://github.com/handlebars-lang/handlebars.js
 
-```
 
 
 

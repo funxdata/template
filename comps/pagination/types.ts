@@ -1,4 +1,5 @@
 export type paginationtpl = {
     total:number,
-    amount:number
+    amount:number,
+    num:number,
 };

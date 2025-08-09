@@ -3,7 +3,12 @@
     "version": "0.1.3",
     "license": "MIT",
     "exports": {
-      "./comps":"./comps/index.ts"
+      "./uiele":"./element/index.ts",
+      "./uicomps":"./comps/index.ts",
+      "./uitpl":"./template/index.ts",
+      "./uieletypes":"./types/element.ts",
+      "./uicompstypes":"./types/comps.ts",
+      "./uitpltypes":"./types/template.ts"
     },
     "nodeModulesDir": "auto",
     "exclude": [

@@ -1,4 +1,4 @@
-export class FxDate {
+export class DxDate {
     private date: Date;
     private year: string;
     private month: string;

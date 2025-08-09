@@ -1,4 +1,4 @@
-export const pagination = `
+export const pagination:string = `
 <p class="number">
     共<span id="<%=it.paginationtpl.total%>"></span>个
     <div class="vg-paginations-pages pcol-8">

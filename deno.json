@@ -26,7 +26,7 @@
     },
     "imports": {
         "@/": "./",
-        "@funxdata/pages": "jsr:@funxdata/pages@^0.0.17",
+        "@funxdata/pages": "jsr:@funxdata/pages@^0.0.24",
         "@funxdata/toolkit": "jsr:@funxdata/toolkit@^0.1.30",
         "@std/assert": "jsr:@std/assert@1",
         "@std/path": "jsr:@std/path@^1.1.1"

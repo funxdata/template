@@ -14,3 +14,17 @@ export const dialog =`
         </div>
     </div>
 </section>`;
+
+export const dialog_preview =`
+    <section class="vg-dialog-box">
+    <div class="vg-dialog">
+        <div class="vg-dialog-header"></div>
+        <div class="vg-dialog-body">
+            <img src="<%=it.url%>">
+        </div>
+        <div class="vg-dialog-footer">
+            <button class="vg-btn" id="cancel">取消</button>
+        </div>
+    </div>
+</section>
+`

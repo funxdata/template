@@ -6,3 +6,5 @@ export type dialogtpl ={
     value:string|number
 }
 export type DialogBox = (node:HTMLElement,cfg:dialogtpl,sure_cb:Callback,change_cb:Callback|null)=>void;
+
+export type DialogPreview= (node:HTMLImageElement)=>void;

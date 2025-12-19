@@ -29,9 +29,18 @@
         "@funxdata/pages": "jsr:@funxdata/pages@^0.0.24",
         "@funxdata/toolkit": "jsr:@funxdata/toolkit@^0.1.30",
         "@std/assert": "jsr:@std/assert@1",
-        "@std/path": "jsr:@std/path@^1.1.1"
+        "@std/path": "jsr:@std/path@^1.1.1",
+        "@tailwindcss/oxide": "npm:@tailwindcss/oxide@4.1.14",
+        "baseline-browser-mapping": "npm:baseline-browser-mapping@^2.9.10"
     },
     "compilerOptions": {
-      "lib": ["dom", "dom.iterable", "esnext","deno.ns"]
+      "lib": ["dom", "dom.iterable", "esnext","deno.ns"],
+      "checkJs": true,
+      "strict": true
+    },
+    "lint": true,
+    "fmt": {
+        "lineWidth": 80,
+        "useTabs": false
     }
 }

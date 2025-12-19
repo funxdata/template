@@ -1,0 +1,23 @@
+{
+    // 启用 Deno
+    "deno.enable": true,
+    "deno.unstable": true,
+    "deno.lint": true,
+    // 关闭 VSCode 内置 TS/JS 自动提示以避免冲突
+    "typescript.enablePromptUseWorkspaceTsdk": true,
+    "javascript.suggest.autoImports": false,
+    "typescript.suggest.autoImports": false,
+    // 自动格式化
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+        "source.fixAll": true
+    },
+    // 其他编辑器提示设置
+    "editor.quickSuggestions": {
+        "other": true,
+        "comments": false,
+        "strings": true
+    },
+    "editor.suggestOnTriggerCharacters": true,
+    "editor.parameterHints.enabled": true
+}

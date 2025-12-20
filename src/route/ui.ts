@@ -1,0 +1,1 @@
+console.log("funxdata ui template")

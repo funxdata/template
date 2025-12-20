@@ -10,7 +10,7 @@
     // 自动格式化
     "editor.formatOnSave": true,
     "editor.codeActionsOnSave": {
-        "source.fixAll": true
+        "source.fixAll": "explicit"
     },
     // 其他编辑器提示设置
     "editor.quickSuggestions": {

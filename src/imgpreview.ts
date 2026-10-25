@@ -17,18 +17,18 @@ import { Tpl } from "@funxdata/pages/tplstype";
 //         {uuid:"abc4",name:"hello4 long story long story long story"},
 //     ],   // 选项内容
 // }
-export const init_img_preview= ()=>{
+export const init_img_preview = () => {
     const document_app = document.getElementById("app") as HTMLElement;
     document_app.innerHTML = `
     <div>
         <img class="vg-img" data-original="images/tibet-1.jpg" src="https://fengyuanchen.github.io/viewerjs/images/thumbnails/tibet-1.jpg">
     </div>
     `
-    const imgs = document.querySelectorAll('img.vg-img');
-    imgs.forEach(img => {
-        img.onclick =()=>{
+    const imgs = document.querySelectorAll('img.vg-img') as NodeListOf<HTMLImageElement>;
+    imgs.forEach((img: HTMLElement) => {
+        img.onclick = () => {
             console.log(".....")
-            DialogPreview(img)
+            // DialogPreview(img)
         }
     });
 }

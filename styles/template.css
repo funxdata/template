@@ -1,0 +1,869 @@
+/*
+ * template 页面结构层
+ * ------------------------------------------------------------------
+ * 只负责「骨架布局」，颜色/字号全部引用 styles 的主题 token：
+ *   --primary / --neutral / --neutral-light / --surface / --background
+ *
+ * token 来源：stylesheet/styles/light/color.css（dark 只需覆盖变量值）
+ * 控件类 vg-* 来源：vango 发布产物 css-manage<version>.css
+ * 与 @funxdata/template 的绑定关系见：template/docs/style-binding.md
+ *
+ * 类名前缀统一为 tpl-，与 vango 的 vg- 组件类共存：
+ *   vg-*   成熟控件（按钮、表格、对话框、下拉、分页…）
+ *   tpl-*  页面骨架（壳、页头、工具栏、卡片网格、设置列表…）
+ */
+
+/* ========== 布局尺度 ==========
+ * 比例参考 TailwindCSS 的 spacing 体系（0.25rem 基准）与 assistant-ui 的
+ * thread 布局（max-width + 固定头/滚动区/底部输入区）。
+ * 只吸收结构与尺度，不引入动画。
+ */
+:root {
+  --tpl-space: 0.25rem;
+  --tpl-aside-width: 16.25rem;   /* Tailwind w-65 */
+  --tpl-aside-collapsed: 3.75rem;
+  --tpl-panel-width: 20rem;
+  --tpl-header-height: 3rem;     /* Tailwind h-12 */
+  --tpl-thread-width: 44rem;     /* assistant-ui --thread-max-width */
+  --tpl-content-width: 72rem;
+  --tpl-gap-sm: 0.5rem;
+  --tpl-gap: 1rem;
+  --tpl-gap-lg: 1.5rem;          /* Tailwind gap-y-6 */
+  --tpl-gap-xl: 2rem;
+  --tpl-radius-sm: 0.375rem;
+  --tpl-radius: 0.5rem;
+  --tpl-radius-lg: 0.75rem;
+  --tpl-card-min: 11.25rem;
+}
+
+/* ========== 应用壳 ========== */
+.tpl-app {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+  color: var(--neutral-dark);
+  background: var(--background);
+}
+
+.tpl-app-aside {
+  display: flex;
+  flex: 0 0 72px;
+  flex-direction: column;
+  width: 72px;
+  padding: 12px 8px;
+  overflow-y: auto;
+  background: var(--surface);
+  border-right: 1px solid var(--neutral-light);
+}
+
+.tpl-app-main {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+}
+
+/* ========== 三栏应用壳 ==========
+ * 结构参考 assistant-ui：固定侧栏 + 可伸缩主区 + 可选右栏；
+ * 只保留布局，不包含折叠/展开动画。
+ */
+.tpl-shell {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+  color: var(--neutral-dark);
+  background: var(--background);
+}
+
+.tpl-shell-aside {
+  display: flex;
+  flex: 0 0 var(--tpl-aside-width);
+  flex-direction: column;
+  width: var(--tpl-aside-width);
+  min-height: 0;
+  overflow: hidden;
+  background: var(--surface);
+  border-right: 1px solid var(--neutral-light);
+}
+
+.tpl-shell-main {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+}
+
+.tpl-shell-panel {
+  display: flex;
+  flex: 0 0 var(--tpl-panel-width);
+  flex-direction: column;
+  width: var(--tpl-panel-width);
+  min-height: 0;
+  overflow-y: auto;
+  background: var(--surface);
+  border-left: 1px solid var(--neutral-light);
+}
+
+.tpl-shell-header {
+  display: flex;
+  flex: 0 0 var(--tpl-header-height);
+  gap: var(--tpl-gap-sm);
+  align-items: center;
+  height: var(--tpl-header-height);
+  padding: 0 16px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--neutral-light);
+}
+
+.tpl-shell-header-actions {
+  display: flex;
+  gap: var(--tpl-gap-sm);
+  align-items: center;
+  margin-left: auto;
+}
+
+/* 页头内嵌区块头时去掉额外下边距 */
+.tpl-shell-header .tpl-page-section-header {
+  margin-bottom: 0;
+}
+
+/* ========== 会话/线程布局 ==========
+ * 借鉴 assistant-ui 的 thread 结构：固定头 + 滚动区 + 底部 composer，
+ * 内容统一 max-width 居中。静态布局，不含入场动画。
+ */
+.tpl-thread {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.tpl-thread-scroll {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.tpl-thread-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--tpl-gap-lg);
+  width: 100%;
+  max-width: var(--tpl-thread-width);
+  margin-inline: auto;
+  padding: 16px;
+}
+
+.tpl-thread-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--tpl-gap-sm);
+}
+
+.tpl-thread-message {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.tpl-thread-message.is-user {
+  align-items: flex-end;
+}
+
+.tpl-thread-message.is-assistant {
+  align-items: flex-start;
+}
+
+.tpl-thread-bubble {
+  max-width: 100%;
+  padding: 8px 16px;
+  overflow-wrap: anywhere;
+  background: var(--background);
+  border-radius: var(--tpl-radius-lg);
+}
+
+.tpl-thread-message.is-assistant .tpl-thread-bubble {
+  padding: 0;
+  background: transparent;
+  border-radius: 0;
+}
+
+.tpl-thread-meta {
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--neutral);
+}
+
+.tpl-thread-composer {
+  flex: 0 0 auto;
+  width: 100%;
+  max-width: var(--tpl-thread-width);
+  margin-inline: auto;
+  padding: 8px 16px 16px;
+}
+
+.tpl-thread-composer-box {
+  display: flex;
+  flex-direction: column;
+  gap: var(--tpl-gap-sm);
+  padding: 8px;
+  background: var(--background);
+  border: 1px solid var(--neutral-light);
+  border-radius: var(--tpl-radius-lg);
+}
+
+.tpl-thread-composer-box:focus-within {
+  border-color: var(--primary);
+}
+
+.tpl-thread-composer-input {
+  width: 100%;
+  min-height: 2.5rem;
+  max-height: 8rem;
+  padding: 4px 10px;
+  overflow-y: auto;
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--neutral-dark);
+  background: transparent;
+  border: 0;
+  outline: none;
+}
+
+.tpl-thread-composer-input:empty::before {
+  color: var(--neutral);
+  content: attr(data-placeholder);
+}
+
+.tpl-thread-composer-actions {
+  display: flex;
+  gap: var(--tpl-gap-sm);
+  align-items: center;
+}
+
+.tpl-thread-composer-actions .is-end {
+  margin-left: auto;
+}
+
+.tpl-thread-welcome {
+  max-width: var(--tpl-thread-width);
+  margin: 0 auto 24px;
+  padding: 0 16px;
+  text-align: center;
+}
+
+/* ========== 页面骨架 ========== */
+.tpl-page {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.tpl-page-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 20px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--neutral-light);
+}
+
+.tpl-page-heading {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.tpl-page-title {
+  margin: 0;
+  overflow: hidden;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.4;
+  color: var(--neutral-dark);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tpl-page-subtitle {
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--neutral);
+}
+
+.tpl-page-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-left: auto;
+}
+
+.tpl-page-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  padding: 12px 20px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--neutral-light);
+}
+
+.tpl-toolbar-right {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-left: auto;
+}
+
+.tpl-page-body {
+  flex: 1;
+  min-height: 0;
+  padding: 16px 20px;
+  overflow-y: auto;
+}
+
+/* 内容区统一最大宽度，避免宽屏下列表/卡片被拉得过长 */
+.tpl-page-body > .tpl-page-section {
+  width: 100%;
+  max-width: var(--tpl-content-width);
+  margin-inline: auto;
+}
+
+.tpl-page-section {
+  padding: 16px;
+  background: var(--surface);
+  border-radius: 12px;
+}
+
+.tpl-page-section + .tpl-page-section {
+  margin-top: 12px;
+}
+
+.tpl-page-section-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.tpl-page-section-title {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--neutral-dark);
+}
+
+.tpl-page-section-extra {
+  margin-left: auto;
+  font-size: 12px;
+  color: var(--neutral);
+}
+
+/* ========== 卡片网格 ========== */
+.tpl-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(var(--tpl-card-min), 1fr));
+  gap: var(--tpl-gap);
+}
+
+.tpl-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  padding: 8px;
+  background: var(--surface);
+  border: 1px solid transparent;
+  border-radius: var(--tpl-radius-lg);
+}
+
+.tpl-card:hover {
+  border-color: var(--neutral-light);
+  box-shadow: 0 8px 24px rgb(15 20 19 / 8%);
+}
+
+.tpl-card-cover {
+  width: 100%;
+  overflow: hidden;
+  background-color: var(--background);
+  background-position: center;
+  background-size: cover;
+  border-radius: 8px;
+  aspect-ratio: 4 / 3;
+}
+
+.tpl-card-cover img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.tpl-card-body {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  padding: 10px 4px 2px;
+}
+
+.tpl-card-main {
+  flex: 1;
+  min-width: 0;
+}
+
+.tpl-card-name {
+  margin: 0;
+  overflow: hidden;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--neutral-dark);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tpl-card-meta {
+  margin: 4px 0 0;
+  overflow: hidden;
+  font-size: 12px;
+  color: var(--neutral);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tpl-card-tools {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  display: flex;
+  gap: 4px;
+  padding: 2px;
+  background: color-mix(in srgb, var(--surface) 88%, transparent);
+  border-radius: 6px;
+  opacity: 0;
+}
+
+.tpl-card:hover .tpl-card-tools,
+.tpl-card:focus-within .tpl-card-tools {
+  opacity: 1;
+}
+
+.tpl-card-avatar {
+  flex: 0 0 24px;
+  width: 24px;
+  height: 24px;
+  background-color: var(--background);
+  background-position: center;
+  background-size: cover;
+  border-radius: 999px;
+}
+
+.tpl-card-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  font-size: 28px;
+  color: var(--neutral);
+  opacity: 0.6;
+}
+
+.tpl-card-fileicon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  color: var(--primary);
+}
+
+.tpl-card-fileicon svg {
+  width: 40%;
+  height: 40%;
+}
+
+.tpl-card-tools-bottom {
+  top: auto;
+  right: 0;
+  bottom: 8px;
+  left: 0;
+  width: max-content;
+  margin-inline: auto;
+}
+
+.tpl-add-card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
+  min-height: 168px;
+  color: var(--neutral);
+  cursor: pointer;
+  background: transparent;
+  border: 1px dashed var(--neutral-light);
+  border-radius: var(--tpl-radius-lg);
+}
+
+.tpl-add-card:hover {
+  color: var(--primary);
+  border-color: var(--primary);
+}
+
+.tpl-add-card-icon {
+  font-size: 24px;
+}
+
+.tpl-add-card-text {
+  font-size: 13px;
+}
+
+/* ========== 标签页 ========== */
+.tpl-tabs-block {
+  margin-bottom: 12px;
+}
+
+.tpl-tabs {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  overflow-x: auto;
+  border-bottom: 1px solid var(--neutral-light);
+}
+
+.tpl-tabs-item {
+  position: relative;
+  padding: 8px 12px;
+  font-size: 14px;
+  color: var(--neutral);
+  white-space: nowrap;
+  cursor: pointer;
+  background: transparent;
+  border: 0;
+}
+
+.tpl-tabs-item:hover {
+  color: var(--neutral-dark);
+}
+
+.tpl-tabs-item.is-active {
+  color: var(--primary);
+  font-weight: 500;
+}
+
+.tpl-tabs-item.is-active::after {
+  position: absolute;
+  right: 12px;
+  bottom: -1px;
+  left: 12px;
+  height: 2px;
+  content: "";
+  background: var(--primary);
+  border-radius: 2px;
+}
+
+/* ========== 面包屑 ========== */
+.tpl-breadcrumbs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+  font-size: 12px;
+  color: var(--neutral);
+  list-style: none;
+}
+
+.tpl-breadcrumbs li {
+  display: inline-flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.tpl-breadcrumbs a:hover {
+  color: var(--primary);
+}
+
+.tpl-breadcrumbs-sep {
+  opacity: 0.5;
+}
+
+.tpl-breadcrumbs-current {
+  color: var(--neutral-dark);
+}
+
+/* ========== 设置列表 ========== */
+.tpl-setting-list {
+  display: flex;
+  flex-direction: column;
+  max-width: 48rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tpl-setting-item {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  padding: 14px 4px;
+  border-bottom: 1px solid var(--neutral-light);
+}
+
+.tpl-setting-item:last-child {
+  border-bottom: 0;
+}
+
+.tpl-setting-main {
+  flex: 1;
+  min-width: 0;
+}
+
+.tpl-setting-title {
+  margin: 0;
+  font-size: 14px;
+  color: var(--neutral-dark);
+}
+
+.tpl-setting-desc {
+  margin: 4px 0 0;
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--neutral);
+}
+
+.tpl-setting-actions {
+  display: flex;
+  flex: 0 0 auto;
+  gap: 8px;
+  align-items: center;
+}
+
+.tpl-setting-avatar {
+  flex: 0 0 40px;
+  width: 40px;
+  height: 40px;
+  background-color: var(--background);
+  background-position: center;
+  background-size: cover;
+  border-radius: 999px;
+}
+
+.tpl-setting-input {
+  margin-top: 6px;
+}
+
+.tpl-setting-file {
+  display: none;
+}
+
+/* ========== 侧栏 ========== */
+.tpl-aside-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  margin-bottom: 12px;
+}
+
+.tpl-aside-logo img {
+  max-width: 32px;
+  max-height: 32px;
+}
+
+.tpl-aside-menus {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 4px;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.tpl-aside-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: center;
+  padding: 8px 4px;
+  color: var(--neutral);
+  text-decoration: none;
+  border-radius: 10px;
+}
+
+.tpl-aside-item:hover,
+.tpl-aside-item.is-active {
+  color: var(--primary);
+  background: color-mix(in srgb, var(--primary) 8%, transparent);
+}
+
+.tpl-aside-item-icon {
+  font-size: 18px;
+}
+
+.tpl-aside-item-title {
+  font-size: 11px;
+  line-height: 1.2;
+}
+
+.tpl-aside-footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: 12px;
+  border-top: 1px solid var(--neutral-light);
+}
+
+/* ========== 表单与工具条 ========== */
+.tpl-search {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  min-width: 220px;
+  padding: 0 12px;
+  background: var(--background);
+  border: 1px solid var(--neutral-light);
+  border-radius: 8px;
+}
+
+.tpl-search:focus-within {
+  border-color: var(--primary);
+}
+
+.tpl-search input {
+  flex: 1;
+  min-width: 0;
+  height: 32px;
+  font-size: 13px;
+  color: var(--neutral-dark);
+  background: transparent;
+  border: 0;
+  outline: none;
+}
+
+.tpl-search-icon {
+  color: var(--neutral);
+}
+
+.tpl-input-row {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.tpl-input-label {
+  font-size: 13px;
+  color: var(--neutral);
+}
+
+.tpl-input {
+  width: 100%;
+  height: 36px;
+  padding: 0 12px;
+  font-size: 14px;
+  color: var(--neutral-dark);
+  background: var(--surface);
+  border: 1px solid var(--neutral-light);
+  border-radius: 8px;
+  outline: none;
+}
+
+.tpl-input:focus {
+  border-color: var(--primary);
+}
+
+.tpl-form-row {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--neutral-light);
+}
+
+.tpl-form-row:last-child {
+  border-bottom: 0;
+}
+
+/* ========== 空状态 ========== */
+.tpl-empty {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
+  padding: 64px 16px;
+  text-align: center;
+  color: var(--neutral);
+}
+
+.tpl-empty-icon {
+  font-size: 28px;
+  opacity: 0.6;
+}
+
+.tpl-empty-title {
+  font-size: 14px;
+  color: var(--neutral-dark);
+}
+
+.tpl-empty-desc {
+  font-size: 12px;
+}
+
+/* ========== 文档页 ========== */
+.tpl-code {
+  padding: 1px 4px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 12px;
+  color: var(--neutral-dark);
+  background: var(--background);
+  border-radius: var(--tpl-radius-sm);
+}
+
+/* ========== 响应式 ========== */
+@media (max-width: 1024px) {
+  .tpl-shell-panel {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .tpl-app-aside {
+    flex-basis: 60px;
+    width: 60px;
+    padding: 8px 4px;
+  }
+
+  .tpl-shell-aside {
+    flex-basis: var(--tpl-aside-collapsed);
+    width: var(--tpl-aside-collapsed);
+  }
+
+  .tpl-page-header,
+  .tpl-page-toolbar,
+  .tpl-page-body {
+    padding-right: 12px;
+    padding-left: 12px;
+  }
+
+  .tpl-page-header {
+    flex-wrap: wrap;
+  }
+
+  .tpl-grid {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 12px;
+  }
+
+  .tpl-thread-stack,
+  .tpl-thread-composer {
+    padding-right: 12px;
+    padding-left: 12px;
+  }
+}

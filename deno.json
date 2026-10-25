@@ -1,13 +1,15 @@
 {
     "name": "@funxdata/template",
-    "version": "0.1.9",
+    "version": "0.1.10",
     "license": "MIT",
     "exports": {
       "./uiele":"./element/index.ts",
       "./uicomps":"./comps/index.ts",
       "./uitpl":"./template/index.ts",
+      "./uistyles":"./styles/index.ts",
       "./uieletypes":"./types/element.ts",
       "./uicompstypes":"./types/comps.ts",
+      "./uipagetypes":"./types/page.ts",
       "./uitpltypes":"./types/template.ts"
     },
     "nodeModulesDir": "auto",
@@ -27,12 +29,13 @@
     "imports": {
         "@/": "./",
         "@funxdata/pages": "jsr:@funxdata/pages@^0.0.24",
-        "@funxdata/template": "jsr:@funxdata/template@^0.1.9",
+        "@funxdata/pages/tplstype": "jsr:@funxdata/pages@^0.0.24/tpls",
+        "@funxdata/template": "jsr:@funxdata/template@^0.1.10",
         "@funxdata/toolkit": "jsr:@funxdata/toolkit@^0.1.30",
         "@std/assert": "jsr:@std/assert@1",
         "@std/path": "jsr:@std/path@^1.1.1"
     },
     "compilerOptions": {
-      "lib": ["dom", "dom.iterable", "esnext","deno.ns"]
+      "lib": ["dom", "dom.iterable", "esnext", "deno.ns"]
     }
 }
